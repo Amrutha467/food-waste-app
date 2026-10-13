@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>History</title>
+</head>
+<body>
+
+<h2>📜 History</h2>
+<div id="list"></div>
+
+<script>
+const BASE_URL = "http://localhost:5000";
+
+async function load() {
+  const res = await fetch(`${BASE_URL}/foods`);
+  const data = await res.json();
+
+  const list = document.getElementById("list");
+
+  data.forEach(f => {
+    list.innerHTML += `
+      <p>
+        ${f.type} (${f.category}) - ${f.status}
+      </p>
+    `;
+  });
+}
+
+load();
+</script>
+
+</body>
+</html>

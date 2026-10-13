@@ -1,0 +1,107 @@
+[
+  {
+    "username": "admin",
+    "password": "1234"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "role": "ngo"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "role": "ngo"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "admin",
+    "password": "1234",
+    "phone": "9884762895",
+    "role": "donor"
+  },
+  {
+    "username": "amrutha",
+    "password": "12345",
+    "phone": "9884762898",
+    "role": "donor"
+  },
+  {
+    "username": "ishwaryaa",
+    "password": "5678",
+    "phone": "9655727552",
+    "role": "donor"
+  }
+]

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NGO Dashboard</title>
+
+<style>
+
+body{
+  font-family: Arial;
+  margin:0;
+  background:#f4f6f8;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#e67e22,#d35400);
+  color:white;
+  padding:18px;
+  text-align:center;
+  font-size:24px;
+  font-weight:bold;
+  letter-spacing:1px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* CONTAINER */
+.container{
+  width:420px;
+  margin:20px auto;
+}
+
+/* CARD */
+.card{
+  background:white;
+  padding:18px;
+  margin:15px 0;
+  border-radius:15px;
+  box-shadow:0 6px 14px rgba(0,0,0,0.1);
+  transition:0.3s;
+  border-left:6px solid #2ecc71;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+}
+
+/* FOOD TITLE */
+.food-title{
+  font-size:20px;
+  color:#2c3e50;
+  margin-bottom:8px;
+}
+
+/* DETAILS */
+.details{
+  color:#555;
+  line-height:1.7;
+  margin-top:8px;
+}
+
+/* BUTTONS */
+.btn{
+  width:100%;
+  padding:11px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn:hover{
+  transform:scale(1.02);
+}
+
+.accept{
+  background:#2ecc71;
+}
+
+.accept:hover{
+  background:#27ae60;
+}
+
+.reject{
+  background:#e74c3c;
+}
+
+.reject:hover{
+  background:#c0392b;
+}
+
+.back{
+  background:#3498db;
+}
+
+.back:hover{
+  background:#2980b9;
+}
+
+/* EMPTY */
+.empty{
+  text-align:center;
+  color:gray;
+  margin-top:30px;
+  font-size:18px;
+}
+
+/* DELIVERY CARD */
+.delivery-box{
+  margin-top:12px;
+  background:#f9f9f9;
+  padding:12px;
+  border-radius:10px;
+  border:1px dashed #ccc;
+}
+
+.partner{
+  color:#8e44ad;
+  font-weight:bold;
+}
+
+.otp{
+  color:#e67e22;
+  font-weight:bold;
+  font-size:18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+🤝 NGO Food Rescue Dashboard
+</header>
+
+<div class="container">
+
+<button class="btn back" onclick="goBack()">⬅ Back To Home</button>
+
+<div id="list"></div>
+
+</div>
+
+<script>
+
+const BASE = "http://localhost:5000";
+
+// DELIVERY PARTNERS
+const partners = [
+  {
+    name:"Arun Kumar",
+    phone:"9876543210",
+    vehicle:"TN 07 AB 2451"
+  },
+  {
+    name:"Vijay",
+    phone:"9123456780",
+    vehicle:"TN 10 XY 9087"
+  },
+  {
+    name:"Rahul",
+    phone:"9988776655",
+    vehicle:"TN 22 KL 4567"
+  },
+  {
+    name:"Karthik",
+    phone:"9001122334",
+    vehicle:"TN 14 OP 2222"
+  }
+];
+
+// LOAD FOOD
+async function load(){
+
+  const data = await (await fetch(BASE + "/foods")).json();
+
+  const list = document.getElementById("list");
+
+  list.innerHTML = "";
+
+  let found = false;
+
+  data.forEach((f,i)=>{
+
+    if(f.status === "Pending"){
+
+      found = true;
+
+      list.innerHTML += `
+      
+      <div class="card">
+
+        <div class="food-title">
+          🍛 ${f.type}
+        </div>
+
+        <div class="details">
+          📦 Quantity: ${f.quantity}<br>
+          📍 Location: ${f.location}<br>
+          ⏰ ${f.time || ""}
+        </div>
+
+        <button class="btn accept" onclick="acceptFood(${i})">
+          ✅ Accept Request
+        </button>
+
+        <button class="btn reject" onclick="rejectFood(${i})">
+          ❌ Reject Request
+        </button>
+
+      </div>
+      `;
+    }
+
+  });
+
+  if(!found){
+    list.innerHTML = `
+      <p class="empty">
+        😔 No Food Requests Available
+      </p>
+    `;
+  }
+}
+
+// ACCEPT FOOD
+async function acceptFood(i){
+
+  // UPDATE STATUS
+  await fetch(BASE + "/update-status/" + i,{
+    method:"PUT"
+  });
+
+  // RANDOM PARTNER
+  const p = partners[Math.floor(Math.random()*partners.length)];
+
+  // RANDOM ETA
+  const eta = Math.floor(Math.random()*15)+5;
+
+  // RANDOM OTP
+  const otp = Math.floor(1000 + Math.random()*9000);
+
+  // SAVE DETAILS
+  localStorage.setItem("partnerName", p.name);
+  localStorage.setItem("partnerPhone", p.phone);
+  localStorage.setItem("partnerVehicle", p.vehicle);
+  localStorage.setItem("eta", eta);
+  localStorage.setItem("otp", otp);
+
+  // GO TRACKING PAGE
+  location = "tracking.html";
+}
+
+// REJECT
+async function rejectFood(i){
+
+  const ok = confirm("Reject this request?");
+
+  if(!ok) return;
+
+  await fetch(BASE + "/delete-food/" + i,{
+    method:"DELETE"
+  });
+
+  load();
+}
+
+// BACK
+function goBack(){
+  location = "index.html";
+}
+
+// INIT
+load();
+
+</script>
+
+</body>
+</html>

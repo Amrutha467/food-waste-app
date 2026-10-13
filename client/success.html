@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Food Pickup Success</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  background:linear-gradient(135deg,#2ecc71,#27ae60);
+}
+
+/* FLOATING ICONS */
+
+.bg{
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:-1;
+}
+
+.bg img{
+  position:absolute;
+  width:90px;
+  opacity:0.15;
+  animation:float 18s linear infinite;
+}
+
+@keyframes float{
+  0%{
+    transform:translateY(100vh) rotate(0deg);
+  }
+  100%{
+    transform:translateY(-20vh) rotate(360deg);
+  }
+}
+
+/* CARD */
+
+.card{
+  width:420px;
+  background:white;
+  padding:35px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  animation:pop 0.5s ease;
+}
+
+@keyframes pop{
+  from{
+    transform:scale(0.8);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.success-icon{
+  font-size:70px;
+  margin-bottom:10px;
+}
+
+h2{
+  color:#27ae60;
+  margin-bottom:15px;
+  font-size:30px;
+}
+
+.message{
+  color:#555;
+  line-height:1.8;
+  font-size:16px;
+  margin-bottom:20px;
+}
+
+/* PARTNER BOX */
+
+.partner-box{
+  background:#f7f7f7;
+  padding:15px;
+  border-radius:12px;
+  text-align:left;
+  margin-top:15px;
+  border-left:5px solid #2ecc71;
+}
+
+.partner-box h3{
+  margin-top:0;
+  color:#2c3e50;
+}
+
+.partner-detail{
+  margin:8px 0;
+  color:#555;
+  font-size:15px;
+}
+
+.highlight{
+  color:#8e44ad;
+  font-weight:bold;
+}
+
+/* BUTTON */
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:22px;
+  border:none;
+  border-radius:10px;
+  background:#3498db;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#2980b9;
+  transform:translateY(-2px);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- FLOATING FOOD IMAGES -->
+
+<div class="bg">
+
+<img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" style="left:10%; animation-duration:12s;">
+<img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" style="left:30%; animation-duration:18s;">
+<img src="https://cdn-icons-png.flaticon.com/512/1046/1046751.png" style="left:50%; animation-duration:14s;">
+<img src="https://cdn-icons-png.flaticon.com/512/135/135620.png" style="left:70%; animation-duration:20s;">
+<img src="https://cdn-icons-png.flaticon.com/512/3075/3075978.png" style="left:90%; animation-duration:16s;">
+
+</div>
+
+<div class="card">
+
+<div class="success-icon">
+🎉
+</div>
+
+<h2>Food Pickup Successful!</h2>
+
+<div class="message">
+Thank you for reducing food waste and helping the community 🙏<br><br>
+
+The NGO has successfully accepted the food request and a delivery partner has completed the pickup process 🚚
+</div>
+
+<!-- DELIVERY DETAILS -->
+
+<div class="partner-box">
+
+<h3>🚚 Delivery Partner Details</h3>
+
+<div class="partner-detail">
+👤 Name:
+<span class="highlight" id="name"></span>
+</div>
+
+<div class="partner-detail">
+📞 Phone:
+<span class="highlight" id="phone"></span>
+</div>
+
+<div class="partner-detail">
+🚘 Vehicle:
+<span class="highlight" id="vehicle"></span>
+</div>
+
+<div class="partner-detail">
+⏰ ETA Completed Successfully
+</div>
+
+</div>
+
+<button onclick="goHome()">
+🏠 Back To Home
+</button>
+
+</div>
+
+<script>
+
+// LOAD DELIVERY DETAILS
+
+document.getElementById("name").innerText =
+localStorage.getItem("partnerName") || "Arun Kumar";
+
+document.getElementById("phone").innerText =
+localStorage.getItem("partnerPhone") || "9876543210";
+
+document.getElementById("vehicle").innerText =
+localStorage.getItem("partnerVehicle") || "TN 07 AB 2451";
+
+// GO HOME
+
+function goHome(){
+  location = "index.html";
+}
+
+</script>
+
+</body>
+</html>

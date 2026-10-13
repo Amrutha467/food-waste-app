@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Food Waste Login</title>
+
+<style>
+
+body{
+  margin:0;
+  padding:0;
+  font-family:Arial;
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(135deg,#14532d,#27ae60);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* FLOATING FOOD IMAGES */
+.bg img{
+  position:absolute;
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:50%;
+  opacity:0.18;
+  animation:float 18s linear infinite;
+}
+
+.bg img:nth-child(1){
+  left:5%;
+  animation-duration:15s;
+}
+
+.bg img:nth-child(2){
+  left:25%;
+  animation-duration:20s;
+}
+
+.bg img:nth-child(3){
+  left:50%;
+  animation-duration:17s;
+}
+
+.bg img:nth-child(4){
+  left:75%;
+  animation-duration:22s;
+}
+
+.bg img:nth-child(5){
+  left:90%;
+  animation-duration:18s;
+}
+
+@keyframes float{
+  0%{
+    transform:translateY(100vh) rotate(0deg);
+  }
+
+  100%{
+    transform:translateY(-120vh) rotate(360deg);
+  }
+}
+
+.card{
+  width:360px;
+  background:rgba(255,255,255,0.96);
+  padding:35px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  text-align:center;
+  z-index:2;
+}
+
+.logo{
+  font-size:55px;
+  margin-bottom:10px;
+}
+
+h2{
+  margin:0;
+  color:#14532d;
+}
+
+p{
+  color:gray;
+  margin-bottom:20px;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:15px;
+  box-sizing:border-box;
+}
+
+input:focus,
+select:focus{
+  outline:none;
+  border:1px solid #27ae60;
+  box-shadow:0 0 5px #2ecc71;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  background:#27ae60;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#1e8449;
+  transform:scale(1.02);
+}
+
+a{
+  color:#27ae60;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.footer{
+  margin-top:15px;
+  font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- FLOATING FOOD BACKGROUND -->
+<div class="bg">
+
+<img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836">
+<img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe">
+<img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0">
+<img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd">
+<img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601">
+
+</div>
+
+<div class="card">
+
+<div class="logo">🌱</div>
+
+<h2>Food Waste System</h2>
+
+<p>Reduce Waste • Share Food • Save Lives</p>
+
+<input id="user" placeholder="Enter Username">
+
+<input id="pass" type="password" placeholder="Enter Password">
+
+<select id="role">
+  <option value="donor">Donor</option>
+  <option value="ngo">NGO</option>
+</select>
+
+<button onclick="login()">Login</button>
+
+<div class="footer">
+  No account?
+  <a href="register.html">Register Here</a>
+</div>
+
+</div>
+
+<script>
+
+const BASE = "http://localhost:5000";
+
+// LOGIN
+async function login(){
+
+  if(!user.value || !pass.value){
+    alert("Please fill all fields ❗");
+    return;
+  }
+
+  try{
+
+    const res = await fetch(BASE + "/login", {
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+        username:user.value,
+        password:pass.value
+      })
+
+    });
+
+    const data = await res.json();
+
+    if(data.success){
+
+      // SAVE ROLE
+      localStorage.setItem("role", data.role);
+
+      // GO TO HOME PAGE
+      window.location.href = "index.html";
+
+    }else{
+
+      alert("Invalid Username or Password ❌");
+
+    }
+
+  }catch(err){
+
+    console.log(err);
+    alert("Server not responding ⚠️");
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Live Food Tracking</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#2ecc71,#27ae60);
+  overflow-x:hidden;
+}
+
+/* FLOATING BACKGROUND */
+
+.bg{
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:-1;
+}
+
+.bg img{
+  position:absolute;
+  width:100px;
+  opacity:0.18;
+  animation:float 18s linear infinite;
+}
+
+@keyframes float{
+  0%{
+    transform:translateY(100vh) rotate(0deg);
+  }
+  100%{
+    transform:translateY(-20vh) rotate(360deg);
+  }
+}
+
+/* MAIN */
+
+.container{
+  width:420px;
+  margin:30px auto;
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  animation:pop 0.5s ease;
+}
+
+@keyframes pop{
+  from{
+    opacity:0;
+    transform:scale(0.8);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+.title{
+  text-align:center;
+  color:#27ae60;
+  font-size:30px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#555;
+  margin-bottom:25px;
+}
+
+/* PARTNER BOX */
+
+.partner{
+  background:#f8f8f8;
+  padding:18px;
+  border-radius:12px;
+  border-left:6px solid #2ecc71;
+  margin-bottom:20px;
+}
+
+.partner h3{
+  margin-top:0;
+  color:#2c3e50;
+}
+
+.detail{
+  margin:10px 0;
+  color:#555;
+  font-size:15px;
+}
+
+.highlight{
+  color:#8e44ad;
+  font-weight:bold;
+}
+
+/* TRACK BAR */
+
+.track-box{
+  margin-top:20px;
+}
+
+.track{
+  width:100%;
+  height:18px;
+  background:#ddd;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress{
+  height:100%;
+  width:0%;
+  background:#2ecc71;
+  transition:1s;
+}
+
+.status{
+  text-align:center;
+  margin-top:10px;
+  color:#555;
+}
+
+/* OTP */
+
+.otp-box{
+  margin-top:25px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  margin-top:10px;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  margin-top:12px;
+  cursor:pointer;
+  color:white;
+  font-size:16px;
+  transition:0.3s;
+}
+
+.verify{
+  background:#3498db;
+}
+
+.verify:hover{
+  background:#2980b9;
+}
+
+.home{
+  background:#e67e22;
+}
+
+.home:hover{
+  background:#d35400;
+}
+
+.timer{
+  text-align:center;
+  font-size:28px;
+  color:#e67e22;
+  margin-top:15px;
+  font-weight:bold;
+}
+
+.note{
+  text-align:center;
+  color:#777;
+  margin-top:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- FLOATING FOOD IMAGES -->
+
+<div class="bg">
+
+<img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" style="left:10%; animation-duration:12s;">
+<img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" style="left:30%; animation-duration:18s;">
+<img src="https://cdn-icons-png.flaticon.com/512/1046/1046751.png" style="left:50%; animation-duration:14s;">
+<img src="https://cdn-icons-png.flaticon.com/512/135/135620.png" style="left:70%; animation-duration:20s;">
+<img src="https://cdn-icons-png.flaticon.com/512/3075/3075978.png" style="left:90%; animation-duration:16s;">
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<div class="title">
+🚚 Live Tracking
+</div>
+
+<div class="subtitle">
+Your delivery partner is on the way
+</div>
+
+<!-- PARTNER -->
+
+<div class="partner">
+
+<h3>👨 Delivery Partner</h3>
+
+<div class="detail">
+👤 Name:
+<span class="highlight" id="name"></span>
+</div>
+
+<div class="detail">
+📞 Phone:
+<span class="highlight" id="phone"></span>
+</div>
+
+<div class="detail">
+🚘 Vehicle:
+<span class="highlight" id="vehicle"></span>
+</div>
+
+<div class="detail">
+🔐 OTP:
+<span class="highlight" id="realOtp"></span>
+</div>
+
+</div>
+
+<!-- ETA -->
+
+<div class="timer" id="timer">
+10 mins
+</div>
+
+<div class="note">
+Estimated Pickup Arrival Time
+</div>
+
+<!-- PROGRESS -->
+
+<div class="track-box">
+
+<div class="track">
+<div class="progress" id="progress"></div>
+</div>
+
+<div class="status" id="status">
+Partner Assigned 🚚
+</div>
+
+</div>
+
+<!-- OTP -->
+
+<div class="otp-box">
+
+<input
+type="number"
+id="otp"
+placeholder="Enter OTP after pickup">
+
+<button class="verify" onclick="verifyOtp()">
+✅ Verify OTP
+</button>
+
+<button class="home" onclick="goHome()">
+🏠 Back Home
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+// LOAD DATA
+
+const partnerName =
+localStorage.getItem("partnerName") || "Arun Kumar";
+
+const partnerPhone =
+localStorage.getItem("partnerPhone") || "9876543210";
+
+const vehicle =
+localStorage.getItem("partnerVehicle") || "TN07AB2451";
+
+const eta =
+localStorage.getItem("eta") || 10;
+
+const realOtp =
+localStorage.getItem("otp") || "1234";
+
+// SHOW DETAILS
+
+document.getElementById("name").innerText =
+partnerName;
+
+document.getElementById("phone").innerText =
+partnerPhone;
+
+document.getElementById("vehicle").innerText =
+vehicle;
+
+document.getElementById("realOtp").innerText =
+realOtp;
+
+// TIMER
+
+let time = eta;
+
+const timer =
+document.getElementById("timer");
+
+const interval = setInterval(()=>{
+
+  if(time <= 0){
+
+    clearInterval(interval);
+
+    timer.innerText = "Partner Arrived 🚚";
+
+    document.getElementById("status").innerText =
+    "Pickup Ready ✅";
+
+    return;
+  }
+
+  timer.innerText = time + " mins";
+
+  time--;
+
+},1000);
+
+// PROGRESS ANIMATION
+
+let width = 0;
+
+const progress =
+document.getElementById("progress");
+
+const move = setInterval(()=>{
+
+  if(width >= 100){
+
+    clearInterval(move);
+
+  } else {
+
+    width += 10;
+
+    progress.style.width = width + "%";
+
+  }
+
+},1000);
+
+// VERIFY OTP
+
+function verifyOtp(){
+
+  const entered =
+  document.getElementById("otp").value;
+
+  if(entered == realOtp){
+
+    alert("Pickup Verified Successfully ✅");
+
+    location = "success.html";
+
+  } else {
+
+    alert("Invalid OTP ❌");
+
+  }
+
+}
+
+// HOME
+
+function goHome(){
+  location = "index.html";
+}
+
+</script>
+
+</body>
+</html>
